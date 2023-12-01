@@ -8,4 +8,5 @@ public abstract class Node{
     }
     public abstract boolean validate();
     public abstract int execute();
+
 }

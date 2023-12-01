@@ -19,9 +19,9 @@ public interface Npc {
     }
 
     public default NPC getNpc(int[] npcID){
-        for (int i = 0; i < npcID.length; i++) {
-            if (NPCs.closest(npcID[i]) != null) {
-                return NPCs.closest(npcID[i]);
+        for (int npc: npcID) {
+            if (NPCs.closest(npc) != null) {
+                return NPCs.closest(npc);
             }
         }
         return null;

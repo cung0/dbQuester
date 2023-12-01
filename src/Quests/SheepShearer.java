@@ -29,23 +29,25 @@ public class SheepShearer extends Node implements Basis{
     public int execute() {
         switch (progress){
             case 0:
-                Logger.log("hi");
                 initiateQuest();
                 break;
             case 1:
-                Logger.log("1");
                 collectWool();
                 break;
             case 21:
                 CLOSE_QUEST_END_SCREEN(Validate.sheep_shearer);
-                break;
+
         }
         return 500;
     }
 
     private void initiateQuest(){
         if (IS_IN_AREA(FRED_HOUSE)){
-            SPEAK_TO_NPC(getNpc("Fred the Farmer"), DIALOGUE_OPTIONS);
+            if (Map.canReach(getNpc("Fred the Farmer"))){
+                SPEAK_TO_NPC(getNpc("Fred the Farmer"), DIALOGUE_OPTIONS);
+            } else {
+                WALK_TO_TILE(getNpc("Fred the Farmer").getTrueTile());
+            }
         } else {
             WALK_TO_AREA(FRED_HOUSE);
         }
@@ -59,6 +61,8 @@ public class SheepShearer extends Node implements Basis{
                 } else if (IS_IN_AREA(SHEEP_FIELD)){
                     SHEAR_SHEEP();
                 } else if (IS_IN_AREA(STILE)){
+                    JUMP_STILE();
+                } else {
                     WALK_TO_TILE(JUMP_TILE);
                 }
             } else if (ENOUGH_WOOL()){
@@ -91,7 +95,8 @@ public class SheepShearer extends Node implements Basis{
     private void SHEAR_SHEEP(){
         if (SHEEP().hasAction("Shear") && Map.canReach(SHEEP())) {
             if (SHEEP().interact("Shear")) {
-                Sleep.sleep(2000, 3000);
+                int current_wool = Inventory.count("Wool");
+                Sleep.sleepUntil(()-> Inventory.count("Wool") == current_wool + 1, 5000);
             }
         } else {
             WALK_TO_AREA(INNER_FIELD);
@@ -112,16 +117,19 @@ public class SheepShearer extends Node implements Basis{
 
     private void SPIN_WOOL() {
         if (IS_ON_TILE(SPINNER_TILE)) {
-            WidgetChild widget = Widgets.getWidgetChild(270, 14);
-            INTERACT_WIDGET(widget, "Spin", Inventory.count("Ball of Wool") >= 20, 30000);
+            Logger.log("on time");
+            WidgetChild widget = Widgets.get(270, 14);
             if (widget != null) {
+                Logger.log("hi");
                 if (widget.interact("Spin")){
                     Sleep.sleepUntil(() -> Inventory.count("Ball of wool") >= 20, 30000);
                 }
             } else if (getGameObject("Spinning wheel").interact("Spin")) {
+                Logger.log("alfd");
                 Sleep.sleep(2000);
             }
         } else {
+            Logger.log("not ");
             WALK_TO_TILE(SPINNER_TILE);
         }
     }

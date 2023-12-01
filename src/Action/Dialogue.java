@@ -6,7 +6,7 @@ import org.dreambot.api.methods.input.Camera;
 import org.dreambot.api.methods.input.Keyboard;
 import org.dreambot.api.wrappers.interactive.NPC;
 
-public interface Dialogue extends Interact, Widget {
+public interface Dialogue extends Interact {
     default boolean IS_IN_DIALOGUE(){
         return Dialogues.inDialogue();
     }
@@ -15,7 +15,7 @@ public interface Dialogue extends Interact, Widget {
         if (!IS_IN_DIALOGUE()){
             if (npc != null){
                 if (npc.isOnScreen()){
-                    interactNpc(npc, "Talk-To", IS_IN_DIALOGUE());
+                    interactable(npc, "Talk-To", IS_IN_DIALOGUE());
                 } else if (Camera.getPitch() < 300){
                     Camera.mouseRotateToPitch(383);
                 } else if (Camera.getZoom() > 240){

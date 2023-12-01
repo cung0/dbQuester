@@ -9,7 +9,7 @@ public interface Contains {
         return area.contains(Players.getLocal());
     }
     default boolean IS_ON_TILE(Tile tile){
-        return tile.distance(Players.getLocal()) < 0;
+        return tile.distance(Players.getLocal()) < 1;
     }
 
 }

@@ -1,55 +1,26 @@
 package Node.src.Objects;
 
 import org.dreambot.api.methods.container.impl.Inventory;
-import org.dreambot.api.methods.map.Map;
 import org.dreambot.api.utilities.Sleep;
-import org.dreambot.api.wrappers.interactive.GameObject;
-import org.dreambot.api.wrappers.interactive.NPC;
-import org.dreambot.api.wrappers.items.GroundItem;
+import org.dreambot.api.wrappers.interactive.interact.Interactable;
 
 public interface Interact extends GameObj, GroundObj, Npc{
-
-
-    public default void interactGameObj(GameObject obj, String interactString){
-        if (obj != null) {
-            obj.interact(interactString);
+    public default boolean interactable(Interactable interactable, String interactString){
+        if (interactable != null){
+            interactable.interact(interactString);
+            return true;
         }
+        return false;
     }
 
-    public default void interactGameObj(GameObject obj, String interactString, boolean condition){
-        if (obj != null) {
-            if (obj.interact(interactString)){
+    public default boolean interactable(Interactable interactable, String interactString, boolean condition){
+        if (interactable != null){
+            if (interactable.interact(interactString)){
                 Sleep.sleepUntil(() -> condition, 5000);
+                return true;
             }
         }
-    }
-
-    public default void interactGroundObj(GroundItem obj, String interactString){
-        if (obj != null) {
-            obj.interact(interactString);
-        }
-    }
-
-    public default void interactGroundObj(GroundItem obj, String interactString, boolean condition){
-        if (obj != null) {
-            if (obj.interact(interactString)){
-                Sleep.sleepUntil(() -> condition, 5000);
-            }
-        }
-    }
-
-    public default void interactNpc(NPC npc, String interactString){
-        if (Map.canReach(npc)) {
-            npc.interact(interactString);
-        }
-    }
-
-    public default void interactNpc(NPC npc, String interactString, boolean condition){
-        if (npc != null) {
-            if (npc.interact(interactString)){
-                Sleep.sleepUntil(() -> condition, 5000);
-            }
-        }
+        return false;
     }
 
     public default void useItemOn(String first_item, String second_item){
